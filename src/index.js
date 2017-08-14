@@ -14,4 +14,52 @@ export default class RoleApiJS {
     return (a['y'] < b['y'] ? -1 : 1);
   }
 
+  login() {
+
+  }
+
+  loginCookie() {
+
+  }
+
+  getStringBetween(string, start, end) {
+
+  }
+
+  createSpace(name) {
+
+  }
+
+  joinSpace(name) {
+
+  }
+
+  addActivityToSpace(space, name) {
+
+  }
+
+  setActivityName(activity, name) {
+
+  }
+
+  removeActivityFromSpace(activity) {
+
+  }
+
+  addWidgetToSpace(space, activity, widgetUrl) {
+
+  }
+
+  removeWidgetFromSpace(widget) {
+
+  }
+
+  setWidgetMetaData(widgetUrl, title, description) {
+
+  }
+
+  moveWidgets(space, activity, widgets) {
+
+  }
 }
+
