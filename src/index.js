@@ -1,3 +1,5 @@
+var request = require('superagent');
+
 export default class RoleApiJS {
   constructor(url, token) {
     this.url = url;
@@ -12,6 +14,17 @@ export default class RoleApiJS {
       return (a['x'] < b['x'] ? -1 : 1);
     }
     return (a['y'] < b['y'] ? -1 : 1);
+  }
+
+  testRequest() {
+    request
+      .get('http://google.com')
+      .end(function (err, res) {
+        if (err) {
+          console.log(err);
+        }
+        console.log(res);
+      });
   }
 
   login() {
