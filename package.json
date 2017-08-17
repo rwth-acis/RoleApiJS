@@ -4,8 +4,9 @@
   "description": "A port of Neumann's php ROLE api.",
   "main": "index.js",
   "scripts": {
-    "build": "WEBPACK_ENV=build webpack",
-    "dev": "WEBPACK_ENV=dev webpack --progress --colors --watch"
+    "buildWeb": "WEBPACK_ENV=build webpack",
+    "buildNode": "WEBPACK_ENV=build webpack --target='node'",
+    "dev": "WEBPACK_ENV=dev webpack --progress --colors --watch --target='node'"
   },
   "author": "Jonas Könning",
   "license": "ISC",
@@ -20,9 +21,7 @@
     "eslint": "^4.4.1",
     "eslint-loader": "^1.9.0",
     "webpack": "^3.5.4",
-    "yargs": "^8.0.2"
-  },
-  "dependencies": {
-    "superagent": "^3.5.2"
+    "yargs": "^8.0.2",
+    "axios": "^0.16.2"
   }
 }
