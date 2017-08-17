@@ -1,4 +1,5 @@
-var XMLHttp = require('xmlhttprequest').XMLHttpRequest;
+// var XMLHttp = require('xmlhttprequest').XMLHttpRequest;
+var axios = require('axios');
 
 export default class RoleApiJS {
   constructor(url, token) {
@@ -17,19 +18,13 @@ export default class RoleApiJS {
   }
 
   testRequest() {
-    var req = new XMLHttp();
-
-    req.open('GET', 'http://www.example.org/example.txt');
-
-    req.onload = function () {
-      if (this.status === 200) {
-        console.log(this.status);
-      } else {
-        console.log(this.status);
-      }
-    };
-
-    req.send();
+    axios.get('http://example.com/')
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
   login() {
 
