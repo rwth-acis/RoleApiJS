@@ -1,4 +1,4 @@
-var request = require('superagent');
+var XMLHttp = require('xmlhttprequest').XMLHttpRequest;
 
 export default class RoleApiJS {
   constructor(url, token) {
@@ -17,16 +17,20 @@ export default class RoleApiJS {
   }
 
   testRequest() {
-    request
-      .get('http://google.com')
-      .end(function (err, res) {
-        if (err) {
-          console.log(err);
-        }
-        console.log(res);
-      });
-  }
+    var req = new XMLHttp();
 
+    req.open('GET', 'http://www.example.org/example.txt');
+
+    req.onload = function () {
+      if (this.status === 200) {
+        console.log(this.status);
+      } else {
+        console.log(this.status);
+      }
+    };
+
+    req.send();
+  }
   login() {
 
   }

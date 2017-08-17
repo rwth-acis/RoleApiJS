@@ -26,6 +26,14 @@ const config = {
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
+  externals:{
+    'xmlhttprequest': {
+      root: '{XMLHttpRequest:XMLHttpRequest}',
+      commonjs2: 'xmlhttprequest',
+      commonjs: 'xmlhttprequest',
+      amd: 'xmlhttprequest'
+    }
+  },
   module: {
     rules: [
       {

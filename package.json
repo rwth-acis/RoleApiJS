@@ -23,6 +23,6 @@
     "yargs": "^8.0.2"
   },
   "dependencies": {
-    "superagent": "^3.5.2"
+    "xmlhttprequest": "^1.8.0"
   }
 }
