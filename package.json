@@ -4,8 +4,8 @@
   "description": "A port of Neumann's php ROLE api.",
   "main": "index.js",
   "scripts": {
-    "buildWeb": "WEBPACK_ENV=build webpack",
-    "buildNode": "WEBPACK_ENV=build webpack --target='node'",
+    "buildWeb": "webpack --env.build",
+    "buildNode": "webpack --target='node'",
     "dev": "WEBPACK_ENV=dev webpack --progress --colors --watch --target='node'"
   },
   "author": "Jonas Könning",
