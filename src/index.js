@@ -67,10 +67,10 @@ export default class RoleApiJS {
           return false;
         }
         const instance = axios.create({
-          headers: {'Cookie': this.cookie, 'access_token': this.token}
+          headers: {'set-cookie': 'conserve-session=' + this.cookie}
         });
 
-        return instance.post(this.url + 'spaces', data)
+        return instance.post(this.url + 'spaces', data, {withCredentials:true})
           .then(function (response) {
             if (response.status === 200 || response.status === 500) {
               return $scope.url + 'spaces/' + name;
