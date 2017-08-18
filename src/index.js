@@ -1,18 +1,11 @@
 // var XMLHttp = require('xmlhttprequest').XMLHttpRequest;
-// eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOlsiMjQyYzQwODQtM
-// zUzYS00ODVkLTlkM2MtODBmNTVhZDczZTIwIl0sImlzcyI6Imh0dHBzOlwvXC9h
-// cGkubGVhcm5pbmctbGF5ZXJzLmV1XC9vXC9vYXV0aDJcLyIsImV4cCI6MTUwMj
-// k3OTE4MSwiaWF0IjoxNTAyOTc1NTgxLCJqdGkiOiIyZTkyNWQ4ZS1lYWQ2LTRkZWE
-// tOGQ2Mi1mODhjNWFjZjY5MmEifQ.u3LOCZtmL0sdTjxLZYrc_StZbdVW91SB-5GX2XS
-// tAsLb-E1GcOjC6beIrHdeWtEXYohWbh3IOx10MEeT6Pog-yrOsVhETpwxlbAYkF
-// gV8uAm44EYSGOh0TTcj5y43T-FqLIyT8MxZSOkUNa4oIDOhFITQQqxzI5eQrlMO
-// F6tPSg
 var axios = require('axios');
 
 export default class RoleApiJS {
   constructor(url, token) {
     this.url = url;
     this.token = token;
+    this.cookie = '';
   }
 
   cmpWidget(a, b) {
@@ -29,20 +22,26 @@ export default class RoleApiJS {
     const instance = axios.create({
       headers: {'access_token': this.token}
     });
+    var $scope = this;
 
-    instance.get(this.url + 'o/oauth2/authorizeImplicit?userinfo_endpoint=https://api.learning-layers.eu/o/oauth2/userinfo')
+    // TODO: make endpoint configurable
+    var login = instance.get(this.url +
+      'o/oauth2/authorizeImplicit?userinfo_endpoint=https://www.googleapis.com/oauth2/v3/userinfo')
       .then(function (response) {
-        this.cookie = response.headers['set-cookie'][0].split(';')[0].split('=')[1];
+        $scope.cookie = response.headers['set-cookie'][0].split(';')[0].split('=')[1];
         return true;
       })
       .catch(function (error) {
         console.log(error);
         return false;
       });
+
+    return login;
   }
 
   loginCookie() {
-
+    // Cannot send cookie to browser (obviously because of the possiblity of using node)
+    // Sending cookies/auth per request instead
   }
 
   getStringBetween(string, start, end) {
@@ -50,7 +49,43 @@ export default class RoleApiJS {
   }
 
   createSpace(name) {
+    var arr = ['openapp.ns.rdf=http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+      'openapp.ns.rdfs=http://www.w3.org/2000/01/rdf-schema#',
+      'openapp.ns.dcterms=http://purl.org/dc/terms/',
+      'openapp.rdf.predicate=http://purl.org/role/terms/space',
+      'openapp.rdf.type=http://purl.org/role/terms/Space',
+      'openapp.rdfs.label=' + name];
+    var data = arr.join('&');
+    var $scope = this;
 
+    var test = this.login();
+
+    test
+      .then((res) => {
+        if (!res) {
+          console.log('Could not log in');
+          return false;
+        }
+        const instance = axios.create({
+          headers: {'Cookie': this.cookie, 'access_token': this.token}
+        });
+
+        return instance.post(this.url + 'spaces', data)
+          .then(function (response) {
+            if (response.status === 200 || response.status === 500) {
+              return $scope.url + 'spaces/' + name;
+            }
+            return false;
+          })
+          .catch(function (error) {
+            console.log(error);
+            return false;
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+        return false;
+      });
   }
 
   joinSpace(name) {
