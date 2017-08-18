@@ -1,11 +1,17 @@
 // var XMLHttp = require('xmlhttprequest').XMLHttpRequest;
 var axios = require('axios');
 
+const axiosCookieJarSupport = require('@3846masa/axios-cookiejar-support');
+const tough = require('tough-cookie');
+
+axiosCookieJarSupport(axios);
+
+const cookieJar = new tough.CookieJar();
+
 export default class RoleApiJS {
   constructor(url, token) {
     this.url = url;
     this.token = token;
-    this.cookie = '';
   }
 
   cmpWidget(a, b) {
@@ -22,13 +28,11 @@ export default class RoleApiJS {
     const instance = axios.create({
       headers: {'access_token': this.token}
     });
-    var $scope = this;
 
     // TODO: make endpoint configurable
     var login = instance.get(this.url +
-      'o/oauth2/authorizeImplicit?userinfo_endpoint=https://www.googleapis.com/oauth2/v3/userinfo')
+      'o/oauth2/authorizeImplicit?userinfo_endpoint=https://www.googleapis.com/oauth2/v3/userinfo', {jar: cookieJar})
       .then(function (response) {
-        $scope.cookie = response.headers['set-cookie'][0].split(';')[0].split('=')[1];
         return true;
       })
       .catch(function (error) {
@@ -37,11 +41,6 @@ export default class RoleApiJS {
       });
 
     return login;
-  }
-
-  loginCookie() {
-    // Cannot send cookie to browser (obviously because of the possiblity of using node)
-    // Sending cookies/auth per request instead
   }
 
   getStringBetween(string, start, end) {
@@ -66,11 +65,8 @@ export default class RoleApiJS {
           console.log('Could not log in');
           return false;
         }
-        const instance = axios.create({
-          headers: {'set-cookie': 'conserve-session=' + this.cookie}
-        });
 
-        return instance.post(this.url + 'spaces', data, {withCredentials:true})
+        return axios.post(this.url + 'spaces', data, {jar: cookieJar, withCredentials: true})
           .then(function (response) {
             if (response.status === 200 || response.status === 500) {
               return $scope.url + 'spaces/' + name;
