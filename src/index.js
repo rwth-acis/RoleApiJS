@@ -1,6 +1,13 @@
 // var XMLHttp = require('xmlhttprequest').XMLHttpRequest;
 var axios = require('axios');
 
+const axiosCookieJarSupport = require('@3846masa/axios-cookiejar-support');
+const tough = require('tough-cookie');
+
+axiosCookieJarSupport(axios);
+
+const cookieJar = new tough.CookieJar();
+
 export default class RoleApiJS {
   constructor(url, token) {
     this.url = url;
@@ -26,7 +33,7 @@ export default class RoleApiJS {
 
     // TODO: make endpoint configurable
     var login = instance.get(this.url +
-      'o/oauth2/authorizeImplicit?userinfo_endpoint=https://www.googleapis.com/oauth2/v3/userinfo')
+      'o/oauth2/authorizeImplicit?userinfo_endpoint=https://www.googleapis.com/oauth2/v3/userinfo', {jar: cookieJar})
       .then(function (response) {
         $scope.cookie = response.headers['set-cookie'][0].split(';')[0].split('=')[1];
         return true;
@@ -70,7 +77,7 @@ export default class RoleApiJS {
           headers: {'set-cookie': 'conserve-session=' + this.cookie}
         });
 
-        return instance.post(this.url + 'spaces', data, {withCredentials:true})
+        return instance.post(this.url + 'spaces', data, {jar: cookieJar, withCredentials: true})
           .then(function (response) {
             if (response.status === 200 || response.status === 500) {
               return $scope.url + 'spaces/' + name;
