@@ -37,7 +37,7 @@ export default class RoleApiJS {
       })
       .catch(function (error) {
         console.log(error);
-        return false;
+        return Promise.reject(new Error('Was not able to log in'));
       });
 
     return login;
@@ -57,30 +57,14 @@ export default class RoleApiJS {
     var data = arr.join('&');
     var $scope = this;
 
-    var test = this.login();
-
-    test
-      .then((res) => {
-        if (!res) {
-          console.log('Could not log in');
-          return false;
+    return this.login()
+      .then((res) => axios.post(this.url + 'spaces', data, {jar: cookieJar, withCredentials: true}))
+      .then((response) => {
+        if (response.status === 200 || response.status === 500) {
+          console.log('Created space');
+          return Promise.resolve($scope.url + 'spaces/' + name);
         }
-
-        return axios.post(this.url + 'spaces', data, {jar: cookieJar, withCredentials: true})
-          .then(function (response) {
-            if (response.status === 200 || response.status === 500) {
-              return $scope.url + 'spaces/' + name;
-            }
-            return false;
-          })
-          .catch(function (error) {
-            console.log(error);
-            return false;
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-        return false;
+        return Promise.reject(new Error('Could not create space'));
       });
   }
 
