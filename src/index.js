@@ -69,11 +69,29 @@ export default class RoleApiJS {
   }
 
   joinSpace(name) {
-
+    // return this.login()
+    // .then((res) => axios.get(this.url + 
+    // 'user/:;predicate=http%3A%2F%2Fpurl.org%2Fopenapp%2Finfo',{jar: cookieJar, withCredentials: true}))
   }
 
   addActivityToSpace(space, name) {
+    var $scope = this;
 
+    return this.login()
+      .then((res) => axios.post(this.url +
+        `spaces/${space}/:;predicate=http%3A%2F%2Fpurl.org%2Frole%2Fterms%2Factivity`,
+      null, {jar: cookieJar, withCredentials: true}))
+      .then((response) => {
+        if (response.status === 200) {
+          console.log(response);
+          const location = response.path;
+
+          $scope.setActivityName(location, name);
+          return Promise.resolve(location);
+        }
+        console.log(response);
+        return Promise.reject(new Error('Could not add activity'));
+      });
   }
 
   setActivityName(activity, name) {
