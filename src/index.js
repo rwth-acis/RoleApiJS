@@ -80,6 +80,7 @@ export default class RoleApiJS {
 
   addActivityToSpace(space, name) {
     var $scope = this;
+    var location;
 
     return this.login()
       .then((res) => axios.post(this.url +
@@ -88,8 +89,8 @@ export default class RoleApiJS {
       .then((response) => {
         if (response.status === 200) {
           console.log(response);
-          const location = response.path;
-
+          location = response.request.path;
+          location = location.substring(1, location.length);
           $scope.setActivityName(location, name);
           return Promise.resolve(location);
         }
@@ -99,7 +100,21 @@ export default class RoleApiJS {
   }
 
   setActivityName(activity, name) {
-
+    cookieJar.setCookie(tough.Cookie.parse('layouts=%7B%7D;'),this.url,function(err, cookie) {
+      console.log(err);
+    });
+    
+    return this.login()
+      .then((res) => axios.put(this.url + activity +
+        '/:;predicate=http%3A%2F%2Fpurl.org%2Fopenapp%2Fmetadata',
+      {'': {'http://purl.org/dc/terms/title': [{'value': `${name}`, 'type': 'literal'}]}},
+      {jar: cookieJar, withCredentials: true}))
+      .then((response) => {
+        if (response.status === 200) {
+          return true;
+        }
+        return Promise.reject(new Error('Could not name activity'));
+      });
   }
 
   removeActivityFromSpace(activity) {
