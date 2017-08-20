@@ -57,6 +57,10 @@ export default class RoleApiJS {
     var data = arr.join('&');
     var $scope = this;
 
+    if (name === undefined || name === '') {
+      return Promise.reject(new Error('Space name empty'));
+    }
+
     return this.login()
       .then((res) => axios.post(this.url + 'spaces', data, {jar: cookieJar, withCredentials: true}))
       .then((response) => {
