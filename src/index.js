@@ -88,22 +88,20 @@ export default class RoleApiJS {
       null, {jar: cookieJar, withCredentials: true}))
       .then((response) => {
         if (response.status === 200) {
-          console.log(response);
           location = response.request.path;
           location = location.substring(1, location.length);
           $scope.setActivityName(location, name);
           return Promise.resolve(location);
         }
-        console.log(response);
         return Promise.reject(new Error('Could not add activity'));
       });
   }
 
   setActivityName(activity, name) {
-    cookieJar.setCookie(tough.Cookie.parse('layouts=%7B%7D;'),this.url,function(err, cookie) {
+    cookieJar.setCookie(tough.Cookie.parse('layouts=%7B%7D;'), this.url, function (err, cookie) {
       console.log(err);
     });
-    
+
     return this.login()
       .then((res) => axios.put(this.url + activity +
         '/:;predicate=http%3A%2F%2Fpurl.org%2Fopenapp%2Fmetadata',
@@ -111,14 +109,25 @@ export default class RoleApiJS {
       {jar: cookieJar, withCredentials: true}))
       .then((response) => {
         if (response.status === 200) {
-          return true;
+          return Promise.resolve(true);
         }
         return Promise.reject(new Error('Could not name activity'));
       });
   }
 
   removeActivityFromSpace(activity) {
+    cookieJar.setCookie(tough.Cookie.parse('layouts=%7B%7D;'), this.url, function (err, cookie) {
+      console.log(err);
+    });
 
+    return this.login()
+      .then((res) => axios.delete(this.url + activity, {jar: cookieJar, withCredentials: true}))
+      .then((response => {
+        if (response === 200) {
+          return true;
+        }
+        return false;
+      }));
   }
 
   addWidgetToSpace(space, activity, widgetUrl) {
