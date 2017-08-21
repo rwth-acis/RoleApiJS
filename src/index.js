@@ -131,7 +131,29 @@ export default class RoleApiJS {
   }
 
   addWidgetToSpace(space, activity, widgetUrl) {
-      return this.login()
+    var uri = this.url + `spaces/${space}/:;` +
+      encodeURI('http://www.w3.org/1999/02/22-rdf-syntax-ns#type') + '=' +
+      encodeURI('http://purl.org/role/terms/OpenSocialGadget') + ';' +
+      encodeURI('http://www.w3.org/2000/01/rdf-schema#seeAlso'), + '=' +
+      encodeURI(widgetUrl) + ';';
+    
+    if (activity.length > 3) {
+      uri += encodeURI('http://purl.org/role/terms/activity') + '=' + encodeURI(activity) + ';';
+    }
+    uri += encodeURI('predicate') + '=' + encodeURI('http://purl.org/role/terms/tool');
+
+    return this.login()
+      .then((res) => axios.post(uri, null, {jar: cookieJar, withCredentials: true}))
+      .then((response) => {
+        if (response.status === 201) {
+          location = response.request.path;
+          location = location.substring(1, location.length);
+          $scope.setActivityName(location, name);
+          return Promise.resolve(location);
+        }
+        return Promise.reject(new Error('Could not add widget'));
+      })
+
   }
 
   removeWidgetFromSpace(widget) {
