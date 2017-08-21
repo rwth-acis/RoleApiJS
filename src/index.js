@@ -157,7 +157,14 @@ export default class RoleApiJS {
   }
 
   removeWidgetFromSpace(widget) {
-
+    return this.login()
+      .then((res) => axios.delete(this.url + widget, {jar: cookieJar, withCredentials: true}))
+      .then((response) => {
+        if (response.status === 200) {
+          return true;
+        }
+        return false;
+      });
   }
 
   setWidgetMetaData(widgetUrl, title, description) {
