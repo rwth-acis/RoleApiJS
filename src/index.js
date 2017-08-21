@@ -168,7 +168,10 @@ export default class RoleApiJS {
   }
 
   setWidgetMetaData(widgetUrl, title, description) {
+    var data = `{"${widgetUrl}":{"http://purl.org/dc/terms/title":[{"type":"literal","value":"${title}"}],"http://purl.org/dc/terms/description":[{"type":"literal","value":"${description}"}]}}`;
 
+    return this.login()
+      .then((res) => axios.put(this.url + widgetUrl + '/:;predicate=http%3A%2F%2Fpurl.org%2Fopenapp%2Fmetadata',data,{jar: cookieJar, withCredentials: true}));
   }
 
   moveWidgets(space, activity, widgets) {
