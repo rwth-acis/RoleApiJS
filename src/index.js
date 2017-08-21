@@ -123,7 +123,7 @@ export default class RoleApiJS {
     return this.login()
       .then((res) => axios.delete(this.url + activity, {jar: cookieJar, withCredentials: true}))
       .then((response => {
-        if (response === 200) {
+        if (response.status === 200) {
           return true;
         }
         return false;
@@ -131,7 +131,7 @@ export default class RoleApiJS {
   }
 
   addWidgetToSpace(space, activity, widgetUrl) {
-
+      return this.login()
   }
 
   removeWidgetFromSpace(widget) {
