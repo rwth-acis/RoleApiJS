@@ -1,5 +1,7 @@
 all: clean node web
 
+cleanNode: clean node
+
 clean:
 	@echo "Cleaning"
 	@rm -rf dist

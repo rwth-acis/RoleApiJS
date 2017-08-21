@@ -4,7 +4,7 @@
   "description": "A port of Neumann's php ROLE api for web and node.",
   "main": "index.js",
   "scripts": {
-    "buildWeb": "webpack --env.build",
+    "buildWeb": "webpack --env.build --target='web'",
     "buildNode": "webpack --target='node'",
     "dev": "WEBPACK_ENV=dev webpack --progress --colors --watch --target='node'"
   },
