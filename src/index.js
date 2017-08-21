@@ -134,7 +134,7 @@ export default class RoleApiJS {
     var uri = this.url + `spaces/${space}/:;` +
       encodeURI('http://www.w3.org/1999/02/22-rdf-syntax-ns#type') + '=' +
       encodeURI('http://purl.org/role/terms/OpenSocialGadget') + ';' +
-      encodeURI('http://www.w3.org/2000/01/rdf-schema#seeAlso'), + '=' +
+      encodeURI('http://www.w3.org/2000/01/rdf-schema#seeAlso') + '=' +
       encodeURI(widgetUrl) + ';';
     
     if (activity.length > 3) {
