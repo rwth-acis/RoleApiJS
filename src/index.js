@@ -43,10 +43,6 @@ export default class RoleApiJS {
     return login;
   }
 
-  getStringBetween(string, start, end) {
-
-  }
-
   createSpace(name) {
     var arr = ['openapp.ns.rdf=http://www.w3.org/1999/02/22-rdf-syntax-ns#',
       'openapp.ns.rdfs=http://www.w3.org/2000/01/rdf-schema#',
@@ -123,7 +119,7 @@ export default class RoleApiJS {
     return this.login()
       .then((res) => axios.delete(this.url + activity, {jar: cookieJar, withCredentials: true}))
       .then((response => {
-        if (response === 200) {
+        if (response.status === 200) {
           return true;
         }
         return false;
@@ -131,19 +127,53 @@ export default class RoleApiJS {
   }
 
   addWidgetToSpace(space, activity, widgetUrl) {
+    var location;
+    var uri = this.url + `spaces/${space}/:;` +
+      encodeURIComponent('http://www.w3.org/1999/02/22-rdf-syntax-ns#type') + '=' +
+      encodeURIComponent('http://purl.org/role/terms/OpenSocialGadget') + ';' +
+      encodeURIComponent('http://www.w3.org/2000/01/rdf-schema#seeAlso') + '=' +
+      encodeURIComponent(widgetUrl) + ';';
+
+    if (activity.length > 3) {
+      uri += encodeURIComponent('http://purl.org/role/terms/activity') + '=' + encodeURIComponent(activity) + ';';
+    }
+    uri += encodeURIComponent('predicate') + '=' + encodeURIComponent('http://purl.org/role/terms/tool');
+
+    return this.login()
+      .then((res) => axios.post(uri, null, {jar: cookieJar, withCredentials: true}))
+      .then((response) => {
+        if (response.status === 200) {
+          location = response.request.path;
+          location = location.substring(1, location.length);
+          return Promise.resolve(location);
+        }
+        return Promise.reject(new Error('Could not add widget'));
+      });
 
   }
 
   removeWidgetFromSpace(widget) {
-
+    return this.login()
+      .then((res) => axios.delete(this.url + widget, {jar: cookieJar, withCredentials: true}))
+      .then((response) => {
+        if (response.status === 200) {
+          return true;
+        }
+        return false;
+      });
   }
 
   setWidgetMetaData(widgetUrl, title, description) {
+    var data = `{"${widgetUrl}":{"http://purl.org/dc/terms/title":[{"type":"literal","value":"${title}"}],
+    "http://purl.org/dc/terms/description":[{"type":"literal","value":"${description}"}]}}`;
 
+    return this.login()
+      .then((res) => axios.put(this.url + widgetUrl + '/:;predicate=http%3A%2F%2Fpurl.org%2Fopenapp%2Fmetadata',
+        data, {jar: cookieJar, withCredentials: true}));
   }
 
   moveWidgets(space, activity, widgets) {
-
+    // Not yet implemented
   }
 }
 
