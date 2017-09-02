@@ -7,8 +7,11 @@
     "buildWeb": "webpack --env.build --target='web'",
     "buildNode": "webpack --target='node'",
     "dev": "WEBPACK_ENV=dev webpack --progress --colors --watch --target='node'",
-    "prepublish" : "make"
+    "prepare" : "webpack --target='node'"
   },
+  "files": [
+    "dist/roleAPIJS.js"
+  ],
   "author": "Jonas Könning",
   "license": "ISC",
   "devDependencies": {
