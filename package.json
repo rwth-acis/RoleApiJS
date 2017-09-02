@@ -6,7 +6,8 @@
   "scripts": {
     "buildWeb": "webpack --env.build --target='web'",
     "buildNode": "webpack --target='node'",
-    "dev": "WEBPACK_ENV=dev webpack --progress --colors --watch --target='node'"
+    "dev": "WEBPACK_ENV=dev webpack --progress --colors --watch --target='node'",
+    "preinstall": "webpack --target='node'"
   },
   "author": "Jonas Könning",
   "license": "ISC",
