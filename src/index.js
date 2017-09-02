@@ -173,7 +173,7 @@ export default class RoleApiJS {
   }
 
   moveWidgets(space, activity, widgets) {
-
+    // Not yet implemented
   }
 }
 
