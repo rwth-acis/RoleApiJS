@@ -2,7 +2,7 @@
   "name": "roleapijs",
   "version": "1.0.0",
   "description": "A port of Neumann's php ROLE api for web and node.",
-  "main": "index.js",
+  "main": "lib/roleAPiJS.js",
   "scripts": {
     "buildWeb": "webpack --env.build --target='web'",
     "buildNode": "webpack --target='node'",
