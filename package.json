@@ -1,5 +1,5 @@
 {
-  "name": "roleapijs",
+  "name": "roleapi",
   "version": "1.0.0",
   "description": "A port of Neumann's php ROLE api for web and node.",
   "main": "dist/roleApiJS.js",
