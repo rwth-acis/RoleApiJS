@@ -30,8 +30,10 @@ export default class RoleApiJS {
     });
 
     // TODO: make endpoint configurable
+    // https://api.learning-layers.eu/o/oauth2/userinfo
+    // 
     var login = instance.get(this.url +
-      'o/oauth2/authorizeImplicit?userinfo_endpoint=https://www.googleapis.com/oauth2/v3/userinfo', {jar: cookieJar})
+      'o/oauth2/authorizeImplicit?userinfo_endpoint=https://api.learning-layers.eu/o/oauth2/userinfo', {jar: cookieJar})
       .then(function (response) {
         return true;
       })
